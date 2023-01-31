@@ -1,0 +1,26 @@
+os: osx
+osx_image: xcode11.5
+rvm: 2.4.2
+language: objective-c
+cache:
+  bundler: true
+branches:
+  only:
+  - master
+  - develop
+  - alpha
+before_install:
+- gem install --no-document bundler -v 1.17.3
+- echo -e "machine github.com\n  login c751112d75b7aad0b38238d79278bf3d33f807c6"
+- brew update
+- brew install git-lfs
+- git lfs install
+- wget https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer
+- sudo security import AppleWWDRCAG3.cer -k ~/Library/Keychains/login.keychain
+- sudo security import AppleWWDRCAG3.cer -k /Library/Keychains/System.keychain
+install:
+- bundle install
+before_script:
+- git lfs pull
+script:
+- "./fastlane/travis.sh"
